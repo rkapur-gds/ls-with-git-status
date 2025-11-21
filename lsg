@@ -446,9 +446,11 @@ function git_status_description_for_dir() {
     cd "$dir" || return 0
     git status --porcelain \
         | perl -ne 'END {
+                        if ($untracked) { print "$untracked untracked\n" }
                         if ($modified) { print "$modified modified\n" }
                         if ($staged) { print "$staged staged\n"; }
                     }
+                    if (/^\?\?/) { $untracked++; }
                     if (/^[MADRC]/) { $staged++; }
                     if (/^.[MAD]/) { $modified++; }'
 }
@@ -734,7 +736,9 @@ for spec in "${ls_dirs[@]}" ; do
                 if [[ "$dir_status" =~ ([0-9]+\ modified) ]] ; then
                     status_label="${status_label:+${status_label}, }${color_changed}${BASH_REMATCH[1]}${color_reset}"
                 fi
-
+                if [[ "$dir_status" =~ ([0-9]+\ untracked) ]] ; then
+                    status_label="${status_label:+${status_label}, }${color_untracked}${BASH_REMATCH[1]}${color_reset}"
+                fi
                 if [[ "$status_label" != '' ]] ; then
                     label="${label} {${status_label}}"
                 fi
