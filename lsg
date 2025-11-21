@@ -737,7 +737,7 @@ for spec in "${ls_dirs[@]}" ; do
                     status_label="${status_label:+${status_label}, }${color_changed}${BASH_REMATCH[1]}${color_reset}"
                 fi
                 if [[ "$dir_status" =~ ([0-9]+\ untracked) ]] ; then
-                    status_label="${status_label:+${status_label}, }${color_changed}${BASH_REMATCH[1]}${color_reset}"
+                    status_label="${status_label:+${status_label}, }${color_untracked}${BASH_REMATCH[1]}${color_reset}"
                 fi
                 if [[ "$status_label" != '' ]] ; then
                     label="${label} {${status_label}}"
